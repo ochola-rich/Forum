@@ -1,3 +1,4 @@
+```
 forum/
 ├── .dockerignore
 ├── Dockerfile
@@ -26,3 +27,4 @@ forum/
 │       ├── login.page.tmpl
 │       └── post.page.tmpl
 └── tests/                  # Unit tests for your logic
+```
