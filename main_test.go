@@ -24,3 +24,23 @@ func TestRoot(t *testing.T) {
 		t.Errorf("bad response expected: %q but got: %q", expectedMessage, w.Body.String())
 	}
 }
+
+func TestPing(t *testing.T){
+	req := httptest.NewRequest(http.MethodGet, "/ping?user=jack", nil)
+
+	w := httptest.NewRecorder()
+
+	ping(w, req)
+
+	desiredcode := http.StatusOK
+
+	if desiredcode != w.Code {
+		t.Errorf("Bad response expected: %v but received: %v", desiredcode, w.Code)
+	}
+	
+	expectedMessage := []byte("Hello jack!\n")
+
+	if !bytes.Equal(expectedMessage, w.Body.Bytes()) {
+		t.Errorf("Bad response body expected: %q but received: %v", expectedMessage, w.Body.String())
+	}
+}
