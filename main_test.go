@@ -37,10 +37,27 @@ func TestPing(t *testing.T){
 	if desiredcode != w.Code {
 		t.Errorf("Bad response expected: %v but received: %v", desiredcode, w.Code)
 	}
-	
 	expectedMessage := []byte("Hello jack!\n")
 
 	if !bytes.Equal(expectedMessage, w.Body.Bytes()) {
 		t.Errorf("Bad response body expected: %q but received: %v", expectedMessage, w.Body.String())
+	}
+}
+
+func TestRegister(t *testing.T){
+	req := httptest.NewRequest(http.MethodGet, "/register?user=jack", nil)
+
+	desiredcode := http.StatusOK
+
+	w := httptest.NewRecorder()
+	register(w, req)
+	if w.Code != desiredcode {
+		t.Errorf("bad response expected: %v but received: %v body %v", desiredcode, w.Code, w.Body.String())
+	}
+
+	expectedMessage := []byte("Welcome jack!\n")
+
+	if !bytes.Equal(expectedMessage, w.Body.Bytes()) {
+		t.Errorf("bad body expected: %q but receives: %q", expectedMessage, w.Body.String())
 	}
 }
