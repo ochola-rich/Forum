@@ -132,6 +132,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	row := db.QueryRow(schema, user)
 
+	// if row == "" {
+	// 	http.Error(w, "user not found", http.StatusNotFound)
+	// 	return
+	// }
+
 	// if err != nil {
 	// 	http.Error(w, "user not found", http.StatusNotFound)
 	// 	return
@@ -140,13 +145,17 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var dbusername, dbpassword string
 
 	row.Scan(&dbusername, &dbpassword)
+	if dbpassword != password {
+		http.Error(w, "user unknown try again", http.StatusForbidden)
+		return
+	}
 	fmt.Println(dbusername, user)
 
 	// for row.Next() {
 	// 	// var username, password string
 	// 	row.Scan(&username, &password)
 
-	fmt.Fprintf(w, "username: %v, password: %v", dbusername, dbpassword)
+	fmt.Fprintf(w, "Welcome back %v", dbusername)
 	// }
 }
 
