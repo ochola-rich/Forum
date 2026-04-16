@@ -7,7 +7,7 @@ import (
 
 	// "encoding/json"
 	"fmt"
-	"io"
+	// "io"
 	"log"
 	"log/slog"
 	"net/http"
@@ -56,49 +56,47 @@ func register(w http.ResponseWriter, r *http.Request) {
 	// userList := params["name"]
 
 	// fmt.Println(params)
+	if Firstname == "" || username == "" || password == "" || email == "" {
+		http.Error(w, "all fields are required", http.StatusBadRequest)
+		return
+	}
 
 	user := "user"
 	name := "unknown"
 	pass := "unknown"
 	mail := "unknown"
-	var output bytes.Buffer
+	// var output bytes.Buffer
 
-	output.WriteString("Welcome ")
-	if len(name) > 0 {
+	// output.WriteString("Welcome ")
+
+	if len("unknown") > 0 {
 		user = username
 		pass = password
 		mail = email
 		name = Firstname
 	}
 
-	output.WriteString(name)
-	output.WriteString("\n")
-	output.WriteString("username: ")
-	output.WriteString(user)
-	output.WriteString("\n ")
-	output.WriteString("email: ")
-	output.WriteString(mail)
-	output.WriteString("\n ")
-	output.WriteString("password: ")
-	output.WriteString(pass)
-	output.WriteString("!\n")
 
-	_, err := w.Write(output.Bytes())
-	if err != nil {
-		http.Error(w, "something went wrong", http.StatusInternalServerError)
-	}
-	body, diode := io.ReadAll(r.Body)
+	fmt.Fprintf(w, "welcome %s\nUsername: %s\nEmail: %s\nPassword: %s\n", name, user, mail, pass)
+
+	// _, err := w.Write(output.Bytes())
+	// if err != nil {
+	// 	http.Error(w, "something went wrong", http.StatusInternalServerError)
+	// }
+	// body, diode := io.ReadAll(r.Body)
 
 	var data UserData
 
-	err = json.Unmarshal(body, &data)
+	err := json.Unmarshal([]byte(name), &data.Name)
 	// diode := json.NewDecoder(r.Body).Decode(&data)
 
-	if diode != nil {
-		fmt.Errorf("failed to get userdata", err)
+	if err != nil {
+		fmt.Errorf("failed to get userdata %v", err)
+		return
 	}
 
-	// fmt.Println(data.Name)
+	fmt.Println(name)
+	fmt.Println(data.Name)
 }
 
 func handleRegisterHtml(w http.ResponseWriter, r *http.Request) {
@@ -117,7 +115,7 @@ func main() {
 
 	db, err := sql.Open("sqlite3", "forum.db")
 	if err != nil {
-		fmt.Errorf("failed to open database", err)
+		fmt.Errorf("failed to open database %v", err)
 	}
 
 	schema := `
