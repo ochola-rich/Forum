@@ -63,6 +63,10 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	schema := `
+	INSERT INTO users (username, password_hash) VALUES (?, ?)`
+
+
 	user := "user"
 	name := "unknown"
 	pass := "unknown"
@@ -78,13 +82,18 @@ func register(w http.ResponseWriter, r *http.Request) {
 		name = Firstname
 	}
 
+_,err := db.Exec(schema, username, password)
 
+
+
+// _, err := w.Write(output.Bytes())
+if err != nil {
+	http.Error(w, "failed to save data into databse", http.StatusInternalServerError)
+	}else{
+		fmt.Fprintln(w, "data saved successfully into database", http.StatusOK)
+	}
+	
 	fmt.Fprintf(w, "welcome %s\nUsername: %s\nEmail: %s\nPassword: %s\n", name, user, mail, pass)
-
-	// _, err := w.Write(output.Bytes())
-	// if err != nil {
-	// 	http.Error(w, "something went wrong", http.StatusInternalServerError)
-	// }
 	// body, diode := io.ReadAll(r.Body)
 
 	var data UserData
@@ -98,6 +107,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 	// }
 
 	fmt.Println(name)
+	fmt.Println(&db)
 	fmt.Println(data.Name)
 }
 
