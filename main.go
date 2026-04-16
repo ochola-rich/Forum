@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"database/sql"
-	"encoding/json"
+	// "encoding/json"
 
 	// "encoding/json"
 	"fmt"
@@ -14,6 +14,8 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 )
+
+var db *sql.DB
 
 type UserData struct {
 	Name string
@@ -87,13 +89,13 @@ func register(w http.ResponseWriter, r *http.Request) {
 
 	var data UserData
 
-	err := json.Unmarshal([]byte(name), &data.Name)
+	// err := json.Unmarshal([]byte(name), &data.Name)
 	// diode := json.NewDecoder(r.Body).Decode(&data)
 
-	if err != nil {
-		fmt.Errorf("failed to get userdata %v", err)
-		return
-	}
+	// if err != nil {
+	// 	fmt.Errorf("failed to get userdata %v", err)
+	// 	return
+	// }
 
 	fmt.Println(name)
 	fmt.Println(data.Name)
@@ -112,8 +114,11 @@ func main() {
 	mux.HandleFunc("/", handleRegisterHtml)
 
 	fmt.Println("server running on port 8080")
+	var err interface{
 
-	db, err := sql.Open("sqlite3", "forum.db")
+	}
+
+	db, err = sql.Open("sqlite3", "forum.db")
 	if err != nil {
 		fmt.Errorf("failed to open database %v", err)
 	}
