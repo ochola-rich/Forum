@@ -29,7 +29,7 @@ func root(w http.ResponseWriter, r *http.Request){
 	if err != nil {
 		slog.Error("error writing the response")
 	}
-	
+
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +54,7 @@ func ping(w http.ResponseWriter, r *http.Request) {
 }
 
 func register(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "ui/templates/register.html")
+	// http.ServeFile(w, r, "ui/templates/register.html")
 
 	Firstname := r.FormValue("name")
 	username := r.FormValue("username")
@@ -91,7 +91,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Println("DB error: ", err)
-		http.Error(w, "failed to save data into databse", http.StatusInternalServerError)
+		http.Error(w, "failed to save data into databse username already exists", http.StatusInternalServerError)
 		return
 	} else {
 		fmt.Fprintln(w, "data saved successfully into database", http.StatusOK)
@@ -161,7 +161,6 @@ func handleRegisterHtml(w http.ResponseWriter, r *http.Request) {
 
 func handleHomePage(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "/ui/templates/home.html")
-	
 }
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
@@ -186,6 +185,7 @@ func main() {
 	mux := http.NewServeMux()
 	// mux.HandleFunc("/{$}", root)
 	mux.HandleFunc("/", root)
+	mux.HandleFunc("/registering", handleRegisterHtml)
 	mux.HandleFunc("/ping", ping)
 	mux.HandleFunc("/register", register)
 	mux.HandleFunc("/log", handleLoginPage)
