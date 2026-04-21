@@ -192,7 +192,7 @@ class NeumorphismLoginForm {
     this.setLoading(true);
 
     try {
-        const response = await fetch('http://localhost:8080/api/login', {
+        const response = await fetch('http://localhost:8080/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -341,7 +341,7 @@ class NeumorphismSignupForm extends NeumorphismLoginForm {
         this.setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8080/api/signup', {
+            const response = await fetch('http://localhost:8080/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
