@@ -56,7 +56,7 @@ func ping(w http.ResponseWriter, r *http.Request) {
 func register(w http.ResponseWriter, r *http.Request) {
 	// http.ServeFile(w, r, "ui/templates/register.html")
 
-	Firstname := r.FormValue("name")
+	// Firstname := r.FormValue("name")
 	username := r.FormValue("username")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
@@ -64,7 +64,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 	// userList := params["name"]
 
 	// fmt.Println(params)
-	if Firstname == "" || username == "" || password == "" || email == "" {
+	if username == "" || password == "" || email == "" {
 		http.Error(w, "all fields are required", http.StatusBadRequest)
 		return
 	}
@@ -73,19 +73,19 @@ func register(w http.ResponseWriter, r *http.Request) {
 	INSERT INTO users (username, password_hash) VALUES (?, ?)`
 
 	user := "user"
-	name := "unknown"
+	// name := "unknown"
 	pass := "unknown"
 	mail := "unknown"
 	// var output bytes.Buffer
 
 	// output.WriteString("Welcome ")
 
-	if len("unknown") > 0 {
+	// if len("unknown") > 0 {
 		user = username
 		pass = password
 		mail = email
-		name = Firstname
-	}
+		// name = Firstname
+	// }
 
 	_, err := db.Exec(schema, username, password)
 
@@ -99,10 +99,10 @@ func register(w http.ResponseWriter, r *http.Request) {
 
 	// _, err := w.Write(output.Bytes())
 
-	fmt.Fprintf(w, "welcome %s\nUsername: %s\nEmail: %s\nPassword: %s\n", name, user, mail, pass)
+	fmt.Fprintf(w, "Username: %s\nEmail: %s\nPassword: %s\n",user, mail, pass)
 	// body, diode := io.ReadAll(r.Body)
 
-	var data UserData
+	// var data UserData
 
 	// err := json.Unmarshal([]byte(name), &data.Name)
 	// diode := json.NewDecoder(r.Body).Decode(&data)
@@ -112,9 +112,9 @@ func register(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 
-	fmt.Println(name)
+	// fmt.Println(name)
 	// fmt.Println(&db)
-	fmt.Println(data.Name)
+	// fmt.Println(data.Name)
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
@@ -145,10 +145,12 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var dbusername, dbpassword string
 
 	row.Scan(&dbusername, &dbpassword)
+
 	if dbpassword != password {
 		http.Error(w, "user unknown try again", http.StatusForbidden)
 		return
 	}
+
 	fmt.Println(dbusername, user)
 
 	// for row.Next() {
@@ -161,11 +163,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 func handleLoginPage(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "ui/templates/login.html")
+	
 }
 
 func handleRegisterHtml(w http.ResponseWriter, r *http.Request) {
 	// fs := http.FileServer(http.Dir("./ui/templates/register.html"))
-	http.ServeFile(w, r, "ui/templates/register.html")
+	http.ServeFile(w,r, "ui/templates/signup.html")
+	// http.Handle("registering", fs)
+	// fs.ServeHTTP(w,r)
 }
 
 func handleHomePage(w http.ResponseWriter, r *http.Request) {
@@ -200,7 +205,8 @@ func main() {
 	mux.HandleFunc("/log", handleLoginPage)
 	mux.HandleFunc("/getusers", getUsers)
 	mux.HandleFunc("/login", login)
-
+	
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./ui/static/"))))
 	fmt.Println("server running on port 8080")
 	var err interface{}
 
