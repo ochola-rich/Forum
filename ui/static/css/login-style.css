@@ -8,7 +8,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #e0e5ec;
+    background: #1b1d1e;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -23,12 +23,12 @@ body {
 }
 
 .login-card {
-    background: #e0e5ec;
+    background: #1b1d1e;
     border-radius: 30px;
     padding: 50px 40px;
     box-shadow: 
-        20px 20px 60px #bec3cf,
-        -20px -20px 60px #ffffff;
+        20px 20px 60px #121415,
+        -20px -20px 60px #242627;
     position: relative;
     transition: all 0.3s ease;
 }
@@ -46,25 +46,25 @@ body {
     width: 80px;
     height: 80px;
     margin: 0 auto 24px;
-    background: #e0e5ec;
+    background: #1b1d1e;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 
-        8px 8px 20px #bec3cf,
-        -8px -8px 20px #ffffff,
-        inset 0 0 0 #bec3cf,
-        inset 0 0 0 #ffffff;
+        8px 8px 20px #121415,
+        -8px -8px 20px #242627,
+        inset 0 0 0 #121415,
+        inset 0 0 0 #242627;
     transition: all 0.3s ease;
 }
 
 .neu-icon:hover {
     box-shadow: 
-        4px 4px 10px #bec3cf,
-        -4px -4px 10px #ffffff,
-        inset 4px 4px 10px #bec3cf,
-        inset -4px -4px 10px #ffffff;
+        4px 4px 10px #121415,
+        -4px -4px 10px #242627,
+        inset 4px 4px 10px #121415,
+        inset -4px -4px 10px #242627;
 }
 
 .icon-inner {
@@ -73,7 +73,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #6c7293;
+    color: #e0e0e0;
 }
 
 .icon-inner svg {
@@ -82,7 +82,7 @@ body {
 }
 
 .login-header h2 {
-    color: #3d4468;
+    color: #ffffff;
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 8px;
@@ -102,18 +102,18 @@ body {
 
 .neu-input {
     position: relative;
-    background: #e0e5ec;
+    background: #1b1d1e;
     border-radius: 15px;
     box-shadow: 
-        inset 8px 8px 16px #bec3cf,
-        inset -8px -8px 16px #ffffff;
+        inset 8px 8px 16px #121415,
+        inset -8px -8px 16px #242627;
     transition: all 0.3s ease;
 }
 
 .neu-input:focus-within {
     box-shadow: 
-        inset 4px 4px 8px #bec3cf,
-        inset -4px -4px 8px #ffffff;
+        inset 4px 4px 8px #121415,
+        inset -4px -4px 8px #242627;
 }
 
 .neu-input input {
@@ -122,7 +122,7 @@ body {
     border: none;
     padding: 20px 24px;
     padding-left: 55px;
-    color: #3d4468;
+    color: #ffffff;
     font-size: 16px;
     font-weight: 500;
     outline: none;
@@ -149,7 +149,7 @@ body {
 .neu-input input:not(:placeholder-shown) + label {
     top: 8px;
     font-size: 12px;
-    color: #6c7293;
+    color: #00c896;
     transform: translateY(0);
 }
 
@@ -170,7 +170,7 @@ body {
 }
 
 .neu-input:focus-within .input-icon {
-    color: #6c7293;
+    color: #00c896;
 }
 
 /* Password Toggle */
@@ -183,7 +183,7 @@ body {
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    background: #e0e5ec;
+    background: #1b1d1e;
     border: none;
     width: 35px;
     height: 35px;
@@ -194,19 +194,19 @@ body {
     justify-content: center;
     color: #9499b7;
     box-shadow: 
-        4px 4px 10px #bec3cf,
-        -4px -4px 10px #ffffff;
+        4px 4px 10px #121415,
+        -4px -4px 10px #242627;
     transition: all 0.3s ease;
 }
 
 .neu-toggle:hover {
-    color: #6c7293;
+    color: #ffffff;
 }
 
 .neu-toggle:active {
     box-shadow: 
-        inset 2px 2px 5px #bec3cf,
-        inset -2px -2px 5px #ffffff;
+        inset 2px 2px 5px #121415,
+        inset -2px -2px 5px #242627;
 }
 
 .neu-toggle svg {
@@ -260,14 +260,14 @@ body {
 .neu-checkbox {
     width: 22px;
     height: 22px;
-    background: #e0e5ec;
+    background: #1b1d1e;
     border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 
-        3px 3px 8px #bec3cf,
-        -3px -3px 8px #ffffff;
+        3px 3px 8px #121415,
+        -3px -3px 8px #242627;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -275,8 +275,8 @@ body {
 
 .remember-wrapper input[type="checkbox"]:checked + .checkbox-label .neu-checkbox {
     box-shadow: 
-        inset 2px 2px 5px #bec3cf,
-        inset -2px -2px 5px #ffffff;
+        inset 2px 2px 5px #121415,
+        inset -2px -2px 5px #242627;
 }
 
 .neu-checkbox svg {
@@ -339,8 +339,8 @@ body {
 .neu-button:hover {
     transform: translateY(-2px);
     box-shadow: 
-        12px 12px 30px #bec3cf,
-        -12px -12px 30px #ffffff;
+        12px 12px 30px #121415,
+        -12px -12px 30px #242627;
 }
 
 .neu-button:hover::before {
@@ -350,8 +350,8 @@ body {
 .neu-button:active {
     transform: translateY(0);
     box-shadow: 
-        inset 4px 4px 10px #bec3cf,
-        inset -4px -4px 10px #ffffff;
+        inset 4px 4px 10px #121415,
+        inset -4px -4px 10px #242627;
 }
 
 .btn-text {
@@ -372,8 +372,8 @@ body {
 .neu-spinner {
     width: 20px;
     height: 20px;
-    border: 3px solid #bec3cf;
-    border-top: 3px solid #6c7293;
+    border: 3px solid #121415;
+    border-top: 3px solid #00c896;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -402,7 +402,7 @@ body {
 .divider-line {
     flex: 1;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #bec3cf, transparent);
+    background: linear-gradient(90deg, transparent, #242627, transparent);
 }
 
 .divider span {
@@ -424,7 +424,7 @@ body {
 .neu-social {
     width: 50px;
     height: 50px;
-    background: #e0e5ec;
+    background: #1b1d1e;
     border: none;
     border-radius: 15px;
     cursor: pointer;
@@ -433,23 +433,23 @@ body {
     justify-content: center;
     color: #6c7293;
     box-shadow: 
-        6px 6px 15px #bec3cf,
-        -6px -6px 15px #ffffff;
+        6px 6px 15px #121415,
+        -6px -6px 15px #242627;
     transition: all 0.3s ease;
 }
 
 .neu-social:hover {
     transform: translateY(-2px);
     box-shadow: 
-        8px 8px 20px #bec3cf,
-        -8px -8px 20px #ffffff;
+        8px 8px 20px #121415,
+        -8px -8px 20px #242627;
 }
 
 .neu-social:active {
     transform: translateY(0);
     box-shadow: 
-        inset 3px 3px 8px #bec3cf,
-        inset -3px -3px 8px #ffffff;
+        inset 3px 3px 8px #121415,
+        inset -3px -3px 8px #242627;
 }
 
 .neu-social svg {
@@ -475,7 +475,7 @@ body {
 }
 
 .signup-link a:hover {
-    color: #3d4468;
+    color: #ffffff;
 }
 
 /* Error States */
@@ -497,8 +497,8 @@ body {
 
 .form-group.error .neu-input {
     box-shadow: 
-        inset 8px 8px 16px #ffb8c4,
-        inset -8px -8px 16px #ffffff,
+        inset 8px 8px 16px #121415,
+        inset -8px -8px 16px #242627,
         0 0 0 2px #ff3b5c;
 }
 
@@ -519,13 +519,13 @@ body {
 }
 
 .success-message .neu-icon {
-    background: #e0e5ec;
+    background: #1b1d1e;
     color: #00c896;
     margin-bottom: 20px;
 }
 
 .success-message h3 {
-    color: #3d4468;
+    color: #ffffff;
     font-size: 1.5rem;
     margin-bottom: 8px;
 }

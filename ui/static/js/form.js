@@ -97,8 +97,8 @@ class NeumorphismLoginForm {
         const shadowY = angleY * 30;
         
         card.style.boxShadow = `
-            ${shadowX}px ${shadowY}px 60px #bec3cf,
-            ${-shadowX}px ${-shadowY}px 60px #ffffff
+            ${shadowX}px ${shadowY}px 60px #121415,
+            ${-shadowX}px ${-shadowY}px 60px #242627
         `;
     }
     
@@ -384,7 +384,7 @@ class NeumorphismSignupForm extends NeumorphismLoginForm {
         }, 300);
         
         setTimeout(() => {
-            window.location.href = 'login.html';
+            window.location.href = '/log';
         }, 2500);
     }
 }
