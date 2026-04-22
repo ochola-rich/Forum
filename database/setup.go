@@ -83,3 +83,13 @@ func createTables() error {
 	_, err := DB.Exec(schema)
 	return err
 }
+
+func (db *sql.DB) seedCategories() {
+    categories := []string{"Technology", "Gaming", "Science", "Music"}
+    for _, name := range categories {
+        _, err := DB.Exec("INSERT OR IGNORE INTO categories (name) VALUES (?)", name)
+        if err != nil {
+            log.Printf("Error seeding category %s: %v", name, err)
+        }
+    }
+}
