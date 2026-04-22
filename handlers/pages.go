@@ -60,3 +60,16 @@ func Root(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("ui/templates/home.html")
 	tmpl.Execute(w, data)
 }
+
+func HandleCreatePostPage(w http.ResponseWriter, r *http.Request) {
+    // Helper from auth.go to check if a session exists
+    _, err := getIDFromSession(r)
+    if err != nil {
+        // If not logged in, redirect to the login page
+        http.Redirect(w, r, "/log", http.StatusSeeOther)
+        return
+    }
+    
+    // If logged in, show the post creation form
+    http.ServeFile(w, r, "ui/templates/post.html")
+}
