@@ -3,13 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Forum - Home</title>
+    <link rel="stylesheet" href="/static/style.css"> 
 </head>
 <body>
-    welcome to the home page
-    <a href="/registering">Register</a>
-    <a href="/log">Login</a>
-    <a href="/getusers">Database</a>
+    <header>
+        <h1>Forum</h1>
+        <nav>
+            <span>Welcome, <strong>{{.Username}}</strong></span>
+            <a href="/">Home</a>
+            {{if eq .Username "Guest"}}
+                <a href="/registering">Register</a>
+                <a href="/log">Login</a>
+            {{else}}
+                <a href="/create-post-page">Create Post</a> <!-- We'll need this route soon -->
+                <a href="/logout">Logout</a>
+            {{end}}
+            <a href="/getusers">Database (Debug)</a>
+        </nav>
+    </header>
 
+    <main>
+        <h2>Recent Posts</h2>
+        <div class="feed">
+            {{range .Posts}}
+                <article style="border: 1px solid #ccc; margin-bottom: 20px; padding: 10px;">
+                    <h3>{{.Title}}</h3>
+                    <p>By <em>{{.AuthorName}}</em> on {{.CreatedAt.Format "Jan 02, 2006"}}</p>
+                    
+                    <div>
+                        <strong>Categories:</strong>
+                        {{range .Categories}}
+                            <span class="badge">[{{.}}]</span>
+                        {{end}}
+                    </div>
+
+                    <p>{{.Content}}</p>
+
+                    <div class="actions">
+                        <button>Like ({{.Likes}})</button>
+                        <button>Dislike ({{.Dislikes}})</button>
+                        <a href="/post?id={{.ID}}">View Comments</a>
+                    </div>
+                </article>
+            {{else}}
+                <p>No posts available. Be the first to post something!</p>
+            {{end}}
+        </div>
+    </main>
 </body>
 </html>
