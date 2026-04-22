@@ -39,7 +39,7 @@
             </div>
 
             <!-- Login Form -->
-            <form id="loginForm">
+            <form id="loginForm"  method="POST" action="/login">
                 <div class="form-group">
                     <div class="neu-input">
                         <div class="input-icon">
@@ -48,7 +48,7 @@
                                 <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
                         </div>
-                        <input type="email" id="email" placeholder=" " required>
+                        <input type="email" id="email" placeholder=" " name="email" required>
                         <label for="email">Email Address</label>
                     </div>
                     <span id="emailError" class="error-message"></span>
@@ -62,7 +62,7 @@
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
                         </div>
-                        <input type="password" id="password" placeholder=" " required>
+                        <input name="password" type="password" id="password" placeholder=" " required>
                         <label for="password">Password</label>
                         <button type="button" id="passwordToggle" class="neu-toggle">
                             <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -121,6 +121,6 @@
             </div>
         </div>
     </div>
-    <script src="/static/js/form.js"></script>
+    <!-- <script src="/static/js/form.js"></script> -->
 </body>
 </html>
