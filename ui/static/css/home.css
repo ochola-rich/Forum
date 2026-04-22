@@ -10,6 +10,9 @@
     --accent-active: #1c192b;
     --card-border: #1f2434;
 }
+a{
+    text-decoration: none;
+}
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
