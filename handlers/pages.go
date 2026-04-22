@@ -24,10 +24,12 @@ func Root(w http.ResponseWriter, r *http.Request) {
 
 	// Fetch Posts
 	query := `
-		SELECT p.id, u.username, p.title, p.content, p.created_at
-		FROM posts p
-		JOIN users u ON p.user_id = u.id
-		ORDER BY p.created_at DESC`
+    SELECT p.id, u.username, p.title, p.content, p.created_at,
+    (SELECT COUNT(*) FROM interactions WHERE post_id = p.id AND is_like = 1) as likes,
+    (SELECT COUNT(*) FROM interactions WHERE post_id = p.id AND is_like = -1) as dislikes
+    FROM posts p
+    JOIN users u ON p.user_id = u.id 
+    ORDER BY p.created_at DESC`
 	
 	rows, err := database.DB.Query(query)
 	if err != nil {
