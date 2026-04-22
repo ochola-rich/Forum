@@ -11,7 +11,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 1. Get user ID from session (We will implement the Session helper next)
+	// Get user ID from session 
 	userID, err := getIDFromSession(r)
 	if err != nil {
 		http.Error(w, "You must be logged in", http.StatusUnauthorized)
@@ -27,7 +27,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2. Insert the Post
+	// Insert the Post
 	res, err := database.DB.Exec("INSERT INTO posts (user_id, title, content) VALUES (?, ?, ?)", userID, title, content)
 	if err != nil {
 		http.Error(w, "Failed to create post", http.StatusInternalServerError)
@@ -36,7 +36,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	postID, _ := res.LastInsertId()
 
-	// 3. Link Categories (Post-Category association)
+	// Link Categories (Post-Category association)
 	for _, catName := range categories {
 		var catID int
 		// Find or Create the category ID
