@@ -127,8 +127,6 @@ func register(w http.ResponseWriter, r *http.Request) {
 
 	// var data UserData
 
-
-
 	// err := json.Unmarshal([]byte(name), &data.Name)
 	// diode := json.NewDecoder(r.Body).Decode(&data)
 
@@ -140,9 +138,6 @@ func register(w http.ResponseWriter, r *http.Request) {
 	// fmt.Println(name)
 	// fmt.Println(&db)
 	// fmt.Println(data.Name)
-
-
-
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
@@ -173,14 +168,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var dbemail, dbpassword string
 
 	row.Scan(&dbemail, &dbpassword)
-	
-	
-	
-	err := bcrypt.CompareHashAndPassword([]byte(dbpassword), []byte(password))
 
+	err := bcrypt.CompareHashAndPassword([]byte(dbpassword), []byte(password))
 	if err != nil {
-			http.Error(w, "user unknown try again", http.StatusForbidden)
-			return
+		http.Error(w, "user unknown try again", http.StatusForbidden)
+		return
 	}
 	fmt.Println(dbpassword)
 
@@ -188,7 +180,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// 	http.Error(w, "user unknown try again", http.StatusForbidden)
 	// 	return
 	// }
-
 
 	fmt.Println(dbemail, user)
 
@@ -198,6 +189,24 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Welcome back %v", dbemail)
 	// }
+}
+
+func getPosts(w http.ResponseWriter, r *http.Request){
+	schema := `SELECT title, content FROM posts`
+
+	row,err := db.Query(schema)
+
+	if err != nil {
+		http.Error(w, "failed to retrieve data from db", http.StatusConflict)
+		return
+	}
+
+	for row.Next() {
+		var title, content string
+		row.Scan(&title, &content)
+
+		fmt.Fprintf(w, "title: %v, content: %v\n", title, content)
+	}
 }
 
 func handleLoginPage(w http.ResponseWriter, r *http.Request) {
@@ -233,16 +242,49 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handlePostPage(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "ui/templates/post.html")
+}
+
+func sendPost(w http.ResponseWriter, r *http.Request) {
+
+	postTitle := r.FormValue("postitle")
+	postContent := r.FormValue("postContent")
+	user_id := 1
+	fmt.Println("post sent successfully")
+	if postTitle == "" {
+		http.Error(w, "post title is required", http.StatusBadRequest)
+		return
+	}
+	if postContent == "" {
+		http.Error(w, "post contentn is required", http.StatusBadRequest)
+		return
+	}
+
+	schema := `INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)`
+
+	_,err := db.Exec(schema, postTitle, postContent, user_id)
+
+	if err != nil {
+		fmt.Printf("failed to add post into the database: %v", err)
+	}else{
+		fmt.Fprintf(w, "successfuly added post into the database")
+	}
+}
+
 func main() {
 	mux := http.NewServeMux()
 	// mux.HandleFunc("/{$}", root)
-	mux.HandleFunc("/", root)
+	mux.HandleFunc("/{$}", root)
+	mux.HandleFunc("/sendpost", sendPost)
 	mux.HandleFunc("/registering", handleRegisterHtml)
 	mux.HandleFunc("/ping", ping)
 	mux.HandleFunc("/register", register)
 	mux.HandleFunc("/log", handleLoginPage)
 	mux.HandleFunc("/getusers", getUsers)
+	mux.HandleFunc("/getposts", getPosts)
 	mux.HandleFunc("/login", login)
+	mux.HandleFunc("/post", handlePostPage)
 
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./ui/static/"))))
 	fmt.Println("server running on port 8080")
@@ -270,6 +312,22 @@ func main() {
 		)
 		`
 	_, err = db.Exec(schema)
+
+
+
+	schemaPost := `
+	CREATE TABLE IF NOT EXISTS posts(
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		title TEXT NOT NULL,
+		content TEXT NOT NULL,
+		user_id
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		)
+		`
+
+		
+
+	_, err = db.Exec(schemaPost)
 
 	if err != nil {
 		fmt.Errorf("failed to create tables: %v", err)
