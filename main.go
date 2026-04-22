@@ -37,6 +37,7 @@ func main() {
 	mux.HandleFunc("/login", handlers.login)
 	mux.HandleFunc("/getusers", handlers.getUsers)
 	mux.HandleFunc("/create-post", handlers.CreatePost)
+	mux.HandleFunc("/create-post-page", handlers.HandleCreatePostPage)
 
 	// Start Server
 	fmt.Println("Server running on http://localhost:8080")
