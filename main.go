@@ -11,8 +11,8 @@ import (
 	// "setup"
 
 	// "encoding/json"
-	// "github.com/gofrs/uuid/v5"
-
+	"github.com/gofrs/uuid/v5"
+	"time"
 	// "encoding/json"
 	"golang.org/x/crypto/bcrypt"
 	// "io"
@@ -153,7 +153,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	schema := `
-	SELECT username, password_hash FROM users WHERE email = ?
+	SELECT id, email, password_hash FROM users WHERE email = ?
 	`
 
 	row := db.QueryRow(schema, email)
@@ -167,9 +167,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// 	http.Error(w, "user not found", http.StatusNotFound)
 	// 	return
 	// }
-	var dbemail, dbpassword string
+	var dbId, dbemail, dbpassword string
 
-	row.Scan(&dbemail, &dbpassword)
+	row.Scan(&dbId, &dbemail, &dbpassword)
 
 	err := bcrypt.CompareHashAndPassword([]byte(dbpassword), []byte(password))
 	if err != nil {
@@ -178,10 +178,29 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(dbpassword)
 
+	u4, err := uuid.NewV4()
+	if err != nil {
+		log.Fatalf("failed to generate uuid: %v", err)
+	}
+
+	expiry := time.Now().Add(24 * time.Hour)
+
+	// expiry := Add(24 * time.Hour)
+
+	fmt.Println(expiry)
+	// fmt.Println(expiry)
+
+	schemaSession := `INSERT INTO sessions(id, user_id, expires_at) VALUES (?, ?, ?)`
+
 	// if dbpassword != password {
 	// 	http.Error(w, "user unknown try again", http.StatusForbidden)
 	// 	return
 	// }
+	_, err = db.Exec(schemaSession, u4, dbId, expiry)
+
+	uid := u4.String()
+
+	setUpCookie(w, uid, expiry)
 
 	fmt.Println(dbemail, user)
 
@@ -192,6 +211,19 @@ func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome back %v", dbemail)
 	// }
 }
+
+func setUpCookie(w http.ResponseWriter, uid string, exp time.Time) {
+	cookie := &http.Cookie{
+		Name:     "session_id",
+		Value:    uid,
+		Expires:  exp,
+		HttpOnly: true,
+		Path:     "/",
+	}
+
+	http.SetCookie(w, cookie)
+}
+
 
 func getPosts(w http.ResponseWriter, r *http.Request) {
 	schema := `SELECT title, content FROM posts`
