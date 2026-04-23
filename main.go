@@ -7,6 +7,7 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+
 	// "setup"
 
 	// "encoding/json"
@@ -192,11 +193,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// }
 }
 
-func getPosts(w http.ResponseWriter, r *http.Request){
+func getPosts(w http.ResponseWriter, r *http.Request) {
 	schema := `SELECT title, content FROM posts`
 
-	row,err := db.Query(schema)
-
+	row, err := db.Query(schema)
 	if err != nil {
 		http.Error(w, "failed to retrieve data from db", http.StatusConflict)
 		return
@@ -248,7 +248,6 @@ func handlePostPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendPost(w http.ResponseWriter, r *http.Request) {
-
 	postTitle := r.FormValue("postitle")
 	postContent := r.FormValue("postContent")
 	user_id := 1
@@ -264,13 +263,19 @@ func sendPost(w http.ResponseWriter, r *http.Request) {
 
 	schema := `INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)`
 
-	_,err := db.Exec(schema, postTitle, postContent, user_id)
+	_, err := db.Exec(schema, postTitle, postContent, user_id)
 
 	if err != nil {
 		fmt.Printf("failed to add post into the database: %v", err)
-	}else{
-		fmt.Fprintf(w, "successfuly added post into the database")
+	} else {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
+
+	// mux := http.NewServeMux()
+
+	// mux.HandleFunc("/{$}", root)
+
+	// handleHomePage(w, r)
 }
 
 func main() {
@@ -289,7 +294,7 @@ func main() {
 
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./ui/static/"))))
 	fmt.Println("server running on port 8080")
-	
+
 	setup()
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }
