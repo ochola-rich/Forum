@@ -5,14 +5,16 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"log/slog"
 	"net/http"
+	"text/template"
 
 	// "setup"
 
 	// "encoding/json"
-	"github.com/gofrs/uuid/v5"
 	"time"
+
+	"github.com/gofrs/uuid/v5"
+
 	// "encoding/json"
 	"golang.org/x/crypto/bcrypt"
 	// "io"
@@ -26,13 +28,35 @@ type UserData struct {
 	Name string
 }
 
-func root(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "ui/templates/home.html")
+type Post struct {
+	Title   string
+	Content string
+}
 
-	_, err := w.Write([]byte("this is the home page\n"))
+func root(w http.ResponseWriter, r *http.Request) {
+	// http.ServeFile(w, r, "ui/templates/home.html")
+
+	schemaPostGet := `SELECT title, content FROM posts`
+
+	row, err := db.Query(schemaPostGet)
 	if err != nil {
-		slog.Error("error writing the response")
 	}
+
+	var post []Post
+
+	for row.Next() {
+		var title, content string
+		row.Scan(&title, &content)
+		post = append(post, Post{title, content})
+	}
+	fmt.Println(post[0])
+
+	tmpl, err := template.ParseFiles("ui/templates/home.html")
+	if err != nil {
+		http.Error(w, "failed to update ui", http.StatusNotFound)
+		return
+	}
+	tmpl.Execute(w, post)
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
@@ -224,7 +248,6 @@ func setUpCookie(w http.ResponseWriter, uid string, exp time.Time) {
 	http.SetCookie(w, cookie)
 }
 
-
 func getPosts(w http.ResponseWriter, r *http.Request) {
 	schema := `SELECT title, content FROM posts`
 
@@ -311,7 +334,6 @@ func sendPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user_id := dbuser_id
-
 
 	fmt.Println("post sent successfully")
 	if postTitle == "" {
