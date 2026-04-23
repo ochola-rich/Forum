@@ -46,6 +46,15 @@ func setup() {
 		`
 	_, err = db.Exec(schemaPost)
 
+	schemaSession :=`
+	CREATE TABLE IF NOT EXISTS sessions(
+    	id TEXT PRIMARY KEY,
+    	user_id INTEGER NOT NULL,
+    	expires_at DATETIME NOT NULL
+	)`
+
+	_,err = db.Exec(schemaSession)
+
 	if err != nil {
 		fmt.Errorf("failed to create tables: %v", err)
 		return
