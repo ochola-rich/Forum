@@ -5,14 +5,14 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	// "log/slog"
 	"net/http"
 	"text/template"
+	"time"
 
 	// "setup"
 
 	// "encoding/json"
-	"time"
-
 	"github.com/gofrs/uuid/v5"
 
 	// "encoding/json"
@@ -36,6 +36,8 @@ type Post struct {
 func root(w http.ResponseWriter, r *http.Request) {
 	// http.ServeFile(w, r, "ui/templates/home.html")
 
+	
+
 	schemaPostGet := `SELECT title, content FROM posts`
 
 	row, err := db.Query(schemaPostGet)
@@ -49,7 +51,7 @@ func root(w http.ResponseWriter, r *http.Request) {
 		row.Scan(&title, &content)
 		post = append(post, Post{title, content})
 	}
-	fmt.Println(post[0])
+	// fmt.Println(post[0])
 
 	tmpl, err := template.ParseFiles("ui/templates/home.html")
 	if err != nil {
@@ -232,7 +234,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// 	// var username, password string
 	// 	row.Scan(&username, &password)
 
-	fmt.Fprintf(w, "Welcome back %v", dbemail)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	// fmt.Fprintf(w, "Welcome back %v", dbemail)
 	// }
 }
 
@@ -305,7 +308,6 @@ func handlePostPage(w http.ResponseWriter, r *http.Request) {
 func sendPost(w http.ResponseWriter, r *http.Request) {
 	postTitle := r.FormValue("postitle")
 	postContent := r.FormValue("postContent")
-	// user_id := 1
 
 	cookie, err := r.Cookie("session_id")
 	if err != nil {
@@ -334,7 +336,6 @@ func sendPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user_id := dbuser_id
-
 	fmt.Println("post sent successfully")
 	if postTitle == "" {
 		http.Error(w, "post title is required", http.StatusBadRequest)
@@ -363,6 +364,7 @@ func sendPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	
 	mux := http.NewServeMux()
 	// mux.HandleFunc("/{$}", root)
 	mux.HandleFunc("/{$}", root)
