@@ -282,7 +282,37 @@ func handlePostPage(w http.ResponseWriter, r *http.Request) {
 func sendPost(w http.ResponseWriter, r *http.Request) {
 	postTitle := r.FormValue("postitle")
 	postContent := r.FormValue("postContent")
-	user_id := 1
+	// user_id := 1
+
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, "not authenticated", http.StatusUnauthorized)
+		return
+	}
+
+	schemaCookie := `SELECT id, user_id, expires_at FROM sessions WHERE id = ?`
+
+	row := db.QueryRow(schemaCookie, cookie.Value)
+
+	var dbId string
+
+	var dbuser_id int
+
+	var dbexpiry time.Time
+
+	err = row.Scan(&dbId, &dbuser_id, &dbexpiry)
+	if err != nil {
+		http.Error(w, "failed to get user credents", http.StatusNotFound)
+	}
+
+	if dbexpiry.Before(time.Now()) {
+		http.Error(w, "cookie expired", http.StatusUnauthorized)
+		return
+	}
+
+	user_id := dbuser_id
+
+
 	fmt.Println("post sent successfully")
 	if postTitle == "" {
 		http.Error(w, "post title is required", http.StatusBadRequest)
@@ -295,7 +325,7 @@ func sendPost(w http.ResponseWriter, r *http.Request) {
 
 	schema := `INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)`
 
-	_, err := db.Exec(schema, postTitle, postContent, user_id)
+	_, err = db.Exec(schema, postTitle, postContent, user_id)
 
 	if err != nil {
 		fmt.Printf("failed to add post into the database: %v", err)
